@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Detail Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
+    <style>
+      :root {
+        --primary: #FF6B35;
+        --primary-dark: #E85A24;
+        --primary-light: #FF8C61;
+        --success: #4CAF50;
+        --warning: #FFC107;
+        --error: #F44336;
+        --neutral-100: #F9F9F9;
+        --neutral-200: #EEEEEE;
+        --neutral-300: #DDDDDD;
+        --neutral-400: #CCCCCC;
+        --neutral-500: #999999;
+        --neutral-600: #666666;
+        --neutral-700: #444444;
+        --neutral-800: #333333;
+        --neutral-900: #111111;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+        --spacing-1: 4px;
+        --spacing-2: 8px;
+        --spacing-3: 16px;
+        --spacing-4: 24px;
+        --spacing-5: 32px;
+        --spacing-6: 48px;
+        --spacing-7: 64px;
+        --spacing-8: 96px;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 16px;
+        --radius-full: 9999px;
+        --transition: 0.3s ease-in-out;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.5;
+        background-color: var(--neutral-100);
+        color: var(--neutral-800);
+        padding: var(--spacing-3);
+      }
+
+      h1, h2, h3 {
+        line-height: 1.2;
+        font-weight: 600;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-4);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-4);
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--neutral-900);
+      }
+
+      .back-link {
+        display: flex;
+        align-items: center;
+        color: var(--neutral-600);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .back-link:hover {
+        color: var(--primary);
+      }
+
+      .back-link svg {
+        margin-right: var(--spacing-2);
+      }
+
+      .food-detail {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+      }
+
+      @media (min-width: 768px) {
+        .food-detail {
+          flex-direction: row;
+        }
+      }
+
+      .food-image-container {
+        position: relative;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .food-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition);
+        aspect-ratio: 4/3;
+      }
+
+      @media (min-width: 768px) {
+        .food-image {
+          aspect-ratio: auto;
+          min-height: 450px;
+        }
+      }
+
+      .food-image-container:hover .food-image {
+        transform: scale(1.05);
+      }
+
+      .food-info {
+        flex: 1;
+        padding: var(--spacing-5);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .food-name {
+        font-size: 2rem;
+        margin-bottom: var(--spacing-3);
+        color: var(--neutral-900);
+      }
+
+      .food-price {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: var(--spacing-3);
+      }
+
+      .inventory-status {
+        display: inline-block;
+        background-color: var(--neutral-200);
+        padding: var(--spacing-1) var(--spacing-3);
+        border-radius: var(--radius-full);
+        color: var(--neutral-700);
+        font-size: 0.875rem;
+        margin-bottom: var(--spacing-4);
+      }
+
+      .in-stock {
+        background-color: rgba(76, 175, 80, 0.1);
+        color: var(--success);
+      }
+
+      .low-stock {
+        background-color: rgba(255, 193, 7, 0.1);
+        color: var(--warning);
+      }
+
+      .divider {
+        height: 1px;
+        background-color: var(--neutral-200);
+        margin: var(--spacing-4) 0;
+      }
+
+      .quantity-selector {
+        display: flex;
+        align-items: center;
+        margin-bottom: var(--spacing-4);
+      }
+
+      .quantity-label {
+        margin-right: var(--spacing-3);
+        font-weight: 500;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--neutral-300);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .quantity-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1.25rem;
+        color: var(--neutral-700);
+        transition: var(--transition);
+      }
+
+      .quantity-btn:hover {
+        background-color: var(--neutral-200);
+      }
+
+      .quantity-input {
+        width: 40px;
+        height: 36px;
+        border: none;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--neutral-800);
+        -moz-appearance: textfield;
+      }
+
+      .quantity-input::-webkit-outer-spin-button,
+      .quantity-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .add-to-cart {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: var(--spacing-3) var(--spacing-4);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: auto;
+      }
+
+      .add-to-cart:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .add-to-cart:active {
+        transform: translateY(0);
+      }
+
+      .add-to-cart svg {
+        margin-right: var(--spacing-2);
+      }
+
+      .food-description {
+        margin-bottom: var(--spacing-4);
+        color: var(--neutral-600);
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .additional-info {
+        margin-top: var(--spacing-5);
+      }
+
+      .info-title {
+        font-size: 1.125rem;
+        margin-bottom: var(--spacing-3);
+        color: var(--neutral-900);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: var(--spacing-3);
+      }
+
+      .info-item {
+        background-color: var(--neutral-100);
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .info-icon {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-2);
+        color: var(--primary);
+      }
+
+      .info-label {
+        font-size: 0.875rem;
+        color: var(--neutral-600);
+        margin-bottom: var(--spacing-1);
+      }
+
+      .info-value {
+        font-weight: 600;
+        color: var(--neutral-800);
+      }
+
+      .notification {
+        position: fixed;
+        top: var(--spacing-4);
+        right: var(--spacing-4);
+        background-color: var(--success);
+        color: white;
+        padding: var(--spacing-3) var(--spacing-4);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        transform: translateX(calc(100% + var(--spacing-4)));
+        transition: transform var(--transition);
+        z-index: 1000;
+        opacity: 0;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      /* Pulse animation for add to cart button */
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(255, 107, 53, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+        }
+      }
+
+      .pulse {
+        animation: pulse 1.5s infinite;
+      }
+
+      /* Fade in animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container fade-in">
+      <div class="header">
+        <a href="#" class="back-link">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Menu
+        </a>
+        <div class="logo">P.A</div>
+      </div>
+
+      <div class="food-detail">
+        <div class="food-image-container">
+          <img src="https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg" alt="Delicious Truffle Pasta" class="food-image">
+        </div>
+        <div class="food-info">
+          <h1 class="food-name">Truffle Pasta</h1>
+          <div class="food-price">$24.99</div>
+          <div id="remaining" class="inventory-status in-stock">In Stock (12 remaining)</div>
+          
+          <p class="food-description">
+            Our signature truffle pasta features handmade fettuccine tossed in a creamy sauce infused with black truffle, topped with shaved parmesan and fresh herbs. A truly indulgent experience for pasta lovers.
+          </p>
+
+          <div class="divider"></div>
+          
+          <div class="quantity-selector">
+            <div class="quantity-label">Quantity:</div>
+            <div class="quantity-controls">
+              <button class="quantity-btn decrease-btn">−</button>
+              <input type="number" class="quantity-input" value="1" min="1" max="12">
+              <button class="quantity-btn increase-btn">+</button>
+            </div>
+          </div>
+          
+          <button class="add-to-cart">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 1.66669L2.5 5.00002V16.6667C2.5 17.1087 2.67559 17.5326 2.98816 17.8452C3.30072 18.1578 3.72464 18.3334 4.16667 18.3334H15.8333C16.2754 18.3334 16.6993 18.1578 17.0118 17.8452C17.3244 17.5326 17.5 17.1087 17.5 16.6667V5.00002L15 1.66669H5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.5 5H17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13.3333 8.33331C13.3333 9.21737 12.9821 10.0652 12.357 10.6904C11.7319 11.3155 10.884 11.6666 9.99998 11.6666C9.11592 11.6666 8.26808 11.3155 7.64296 10.6904C7.01784 10.0652 6.66665 9.21737 6.66665 8.33331" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Add to Cart
+          </button>
+
+          <div class="additional-info">
+            <h3 class="info-title">Product Details</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="info-icon">🕒</div>
+                <div class="info-label">Prep Time</div>
+                <div class="info-value">15 min</div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon">🔥</div>
+                <div class="info-label">Calories</div>
+                <div class="info-value">520 kcal</div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon">🌿</div>
+                <div class="info-label">Dietary</div>
+                <div class="info-value">Vegetarian</div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon">⭐</div>
+                <div class="info-label">Rating</div>
+                <div class="info-value">4.8/5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notification" id="notification">
+      Item added to your cart!
+    </div>
+
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>
