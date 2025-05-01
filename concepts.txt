@@ -1,0 +1,11 @@
+1. Query -> GET
+2. Mutation -> POST - PUT - DELETE
+3. Schema
+4. Argument -> body
+5. Field -> Property
+
+// Method -> POST
+
+fetch(url, {
+    method: "POST"
+})
